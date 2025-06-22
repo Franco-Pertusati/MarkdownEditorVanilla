@@ -1,14 +1,27 @@
 const page = document.querySelector(".page");
-const linePosition = document.getElementById("linePosition");
+const textCursor = document.getElementById("linePosition");
 
-linePosition.addEventListener("keydown", function (event) {
+const pageContent = [
+  "title",
+  "Seeing something unexpected? Take a look at the GitHub profile guide.",
+];
+
+textCursor.addEventListener("keydown", function (event) {
   if (event.key === "Enter") {
-    lineBreak(linePosition.value);
+    lineBreak(textCursor.value);
   }
 });
 
-function focusLinePosition() {
-  linePosition.focus();
+function renderPageContent() {
+  pageContent.forEach((textLine) => {
+    const lineElement = document.createElement("div");
+    lineElement.textContent = textLine;
+    page.appendChild(lineElement);
+  });
+}
+
+function focustextCursor() {
+  textCursor.focus();
   event.stopPropagation();
 }
 
@@ -23,7 +36,9 @@ function lineBreak(value) {
   const newBr = document.createElement("br");
   page.appendChild(newBr);
 
-  linePosition.value = "";
-  page.appendChild(linePosition);
-  linePosition.focus();
+  textCursor.value = "";
+  page.appendChild(textCursor);
+  textCursor.focus();
 }
+
+renderPageContent()
