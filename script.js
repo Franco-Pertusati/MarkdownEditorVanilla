@@ -2,22 +2,18 @@ const page = document.querySelector(".page");
 const textCursor = document.getElementById("linePosition");
 
 const pageContent = [
-  "title",
-  "Seeing something unexpected? Take a look at the GitHub profile guide.",
+  { type: "title-1-line", content: "Title", id: 1 },
+  { type: "regular-text-line", content: "Lorem ipsum wasd pacu tasc.", id: 2 },
 ];
 
 textCursor.addEventListener("keydown", function (event) {
   if (event.key === "Enter") {
-    lineBreak(textCursor.value);
+    lineBreak();
   }
 });
 
-function renderPageContent() {
-  pageContent.forEach((textLine) => {
-    const lineElement = document.createElement("div");
-    lineElement.textContent = textLine;
-    page.appendChild(lineElement);
-  });
+function renderAllLines() {
+  page.appendChild(textCursor);
 }
 
 function focustextCursor() {
@@ -25,20 +21,54 @@ function focustextCursor() {
   event.stopPropagation();
 }
 
-function lineBreak(value) {
-  const newLine = document.createElement("span");
+function lineBreak() {
+  const lineContent = textCursor.value;
 
-  if (value.length > 0) {
-    newLine.textContent = value;
-    page.appendChild(newLine);
+  if (!lineContent.length != "") {
+    const newBr = document.createElement("br");
+    page.appendChild(newBr);
+  } else {
+    createLine(lineContent);
+    renderLine(lineContent);
   }
-
-  const newBr = document.createElement("br");
-  page.appendChild(newBr);
 
   textCursor.value = "";
   page.appendChild(textCursor);
   textCursor.focus();
 }
 
-renderPageContent()
+function createLine(lineContent) {
+  const newLine = {
+    type: "regular-text-line",
+    content: lineContent,
+    id: setId(),
+  };
+  pageContent.push(newLine);
+  console.log(newLine);
+}
+
+function renderLine(lineContent) {
+  const newLine = document.createElement("div");
+  newLine.textContent = lineContent;
+  page.appendChild(newLine);
+}
+
+function updateLine() {}
+
+function deleteContentLine() {}
+
+function focusOnContentLine(id) {}
+
+function setId() {
+  maxId = 0;
+
+  pageContent.forEach((line) => {
+    if (line.id > 0) {
+      maxId = line.id;
+    }
+  });
+
+  return maxId + 1;
+}
+
+renderAllLines();
