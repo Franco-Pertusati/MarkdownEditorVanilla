@@ -62,3 +62,8 @@ input {
 input:focus {
     outline: none;
 }
+
+.title-1-line {
+    font-size: 2.4rem;
+    font-weight: bold;
+}
