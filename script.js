@@ -4,8 +4,10 @@ const textCursor = document.getElementById("linePosition");
 var currentIndex = 0;
 
 const pageContent = [
-  { style: "title-1-line", content: "## Title", id: 1 },
-  { style: "regular-text-line", content: "Lorem ipsum wasd pacu tasc.", id: 2 },
+  { content: "# Title \n", id: 1 },
+  { content: "Una linea sin estilos \n", id: 2 },
+  { content: "Una palabra en **negrita** para probar \n", id: 3 },
+  { content: "Otra linea sin estilos \n", id: 2 },
 ];
 
 textCursor.addEventListener("keydown", function (event) {
@@ -53,7 +55,6 @@ function lineBreak() {
 
 function createLine(lineContent) {
   const newLine = {
-    style: "",
     content: lineContent,
     id: setId(),
   };
@@ -65,11 +66,22 @@ function createLine(lineContent) {
 function renderLine(line) {
   const newLine = document.createElement("div");
 
-  line.lineContent = newLine.classList = line.style;
-  newLine.textContent = line.content;
+  newLine.innerHTML = convertToHTML(line.content);
   newLine.id = `line-${line.id}`;
 
   page.appendChild(newLine);
+}
+
+function convertToHTML(text) {
+  text = text.replace(/^# (.*)/, "<h1>$1</h1>");
+
+  text = text.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
+
+  if (!/^<h1>/.test(text)) {
+    text = `<p>${text}</p>`;
+  }
+
+  return text;
 }
 
 function setId() {
