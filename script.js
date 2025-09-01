@@ -15,12 +15,44 @@ textCursor.addEventListener("keydown", function (event) {
     lineBreak();
   }
   if (event.key === "ArrowUp" && currentIndex > 0) {
+    if (textCursor.value.trim()) {
+      lineBreak();
+    }
     currentIndex--;
-    const referenceNode = document.getElementById(`line-${pageContent[currentIndex].id}`)
-    renderLineById(pageContent[currentIndex].id, referenceNode);
     setCursorAtLine(pageContent[currentIndex].id);
+    if (currentIndex + 1 === pageContent.length) {
+      renderLineById(pageContent[currentIndex].id, textCursor);
+    }
   }
 });
+
+function renderLine(line) {
+  const newLine = document.createElement("div");
+
+  newLine.innerHTML = convertToHTML(line.content);
+  newLine.id = `line-${line.id}`;
+
+  page.appendChild(newLine);
+}
+
+function setCursorAtLine(id) {
+  const line = document.getElementById(`line-${id}`);
+  line.remove();
+  textCursor.value = pageContent[currentIndex].content;
+}
+
+function renderLineById(id, referenceNode) {
+  console.log(referenceNode);
+  if (referenceNode === null) {
+    return;
+  }
+  const line = pageContent.find((l) => l.id === id);
+  const newLine = document.createElement("div");
+
+  newLine.innerHTML = convertToHTML(line.content);
+  newLine.id = `line-${line.id}`;
+  page.insertBefore(newLine, referenceNode);
+}
 
 function renderAllLines() {
   pageContent.forEach((l) => {
@@ -60,34 +92,6 @@ function createLine(lineContent, render) {
   if (render) {
     renderLine(newLine);
   }
-}
-
-function renderLine(line) {
-  const newLine = document.createElement("div");
-
-  newLine.innerHTML = convertToHTML(line.content);
-  newLine.id = `line-${line.id}`;
-
-  page.appendChild(newLine);
-}
-
-function setCursorAtLine(id) {
-  const line = document.getElementById(`line-${id}`);
-  line.remove();
-  textCursor.value = pageContent[currentIndex].content;
-}
-
-function renderLineById(id, referenceNode) {
-  console.log(referenceNode)
-  if (referenceNode === null) {
-    return
-  }
-  const line = pageContent.find((l) => l.id === id);
-  const newLine = document.createElement("div");
-
-  newLine.innerHTML = convertToHTML(line.content);
-  newLine.id = `line-${line.id}`;
-  page.insertBefore(newLine, referenceNode);
 }
 
 function convertToHTML(text) {
